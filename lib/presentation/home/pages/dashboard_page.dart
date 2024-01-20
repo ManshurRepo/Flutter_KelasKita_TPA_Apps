@@ -7,6 +7,8 @@ import 'package:flutter_cbt_tpa_app/data/datasource/auth_local_datasource.dart';
 import 'package:flutter_cbt_tpa_app/presentation/auth/pages/login_page.dart';
 import 'package:flutter_cbt_tpa_app/presentation/home/pages/home_page.dart';
 import 'package:flutter_cbt_tpa_app/presentation/home/widgets/nav_menu.dart';
+import 'package:flutter_cbt_tpa_app/presentation/materi/pages/materi_page.dart';
+import 'package:flutter_cbt_tpa_app/presentation/profile/pages/profile_page.dart';
 
 import '../../auth/bloc/logout/logout_bloc.dart';
 
@@ -22,11 +24,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
   final List<Widget> _pages = [
     const HomePage(),
-    const Center(child: Text('Materi')),
+    const MateriPage(),
     const Center(
       child: Text('Notif'),
     ),
-    const LogoutWidget(),
+    const ProfilPage(),
   ];
 
   void _onItemTapped(int index) {
