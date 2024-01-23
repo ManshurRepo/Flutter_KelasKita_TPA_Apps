@@ -4,9 +4,14 @@ import 'package:flutter_cbt_tpa_app/presentation/quiz/widgets/answer_choices.dar
 
 import '../../../core/components/buttons.dart';
 
-class QuizMultipleChoice extends StatelessWidget {
+class QuizMultipleChoice extends StatefulWidget {
   const QuizMultipleChoice({super.key});
 
+  @override
+  State<QuizMultipleChoice> createState() => _QuizMultipleChoiceState();
+}
+
+class _QuizMultipleChoiceState extends State<QuizMultipleChoice> {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<String> selectedAnswer = ValueNotifier("");
