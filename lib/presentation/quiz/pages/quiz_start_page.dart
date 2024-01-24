@@ -4,11 +4,13 @@ import 'package:flutter_cbt_tpa_app/core/assets/assets.gen.dart';
 import 'package:flutter_cbt_tpa_app/core/components/custom_scaffold.dart';
 import 'package:flutter_cbt_tpa_app/core/constants/colors.dart';
 import 'package:flutter_cbt_tpa_app/core/extensions/build_context_ext.dart';
+import 'package:flutter_cbt_tpa_app/presentation/quiz/bloc/daftar_soal/daftar_soal_bloc.dart';
 import 'package:flutter_cbt_tpa_app/presentation/quiz/bloc/ujian_by_kategori/ujian_by_kategori_bloc.dart';
 import 'package:flutter_cbt_tpa_app/presentation/quiz/pages/quiz_finish_page.dart';
 import 'package:flutter_cbt_tpa_app/presentation/quiz/widgets/countdown_timer.dart';
 import 'package:flutter_cbt_tpa_app/presentation/quiz/widgets/quiz_multiple_choice.dart';
 
+import '../bloc/hitung_nilai/hitung_nilai_bloc.dart';
 import '../models/quiz_model.dart';
 
 class QuizStartPage extends StatefulWidget {
@@ -35,32 +37,64 @@ class _QuizStartPageState extends State<QuizStartPage> {
   int quizNumber = 1;
   @override
   Widget build(BuildContext context) {
-
-
     return CustomScaffold(
       appBarTitle: Text(widget.data.name),
       actions: [
         Assets.icons.clock.image(width: 24.0),
         const SizedBox(width: 8.0),
-        BlocBuilder<UjianByKategoriBloc, UjianByKategoriState>(
-          builder: (context, state) {
-            return state.maybeMap(
-              orElse: () {
-                return const SizedBox();
-              },
+        BlocListener<UjianByKategoriBloc, UjianByKategoriState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: () {},
               success: (e) {
-                return CountdownTimer(
-                  duration: e.response.timer,
-                  onTimerCompletion: (timeRemaining) {
-                    context.pushReplacement(QuizFinishPage(
-                      data: widget.data,
-                      timeRemaining: timeRemaining,
-                    ));
-                  },
-                );
+                if (e.timer == 0) {
+                  //show dialog waktu habis
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            title: const Text('Waktu Habis'),
+                            content: const Text(
+                                'Waktu anda telah habis, silahkan klik tombol selanjutnya'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () =>
+                                      context.pushReplacement(QuizFinishPage(
+                                        data: widget.data,
+                                        timeRemaining: 0,
+                                      )),
+                                  child: const Text('Selesai'))
+                            ],
+                          ));
+                } else {
+                  context.read<DaftarSoalBloc>().add(
+                        DaftarSoalEvent.getDaftarSoal(
+                          e.data,
+                        ),
+                      );
+                }
               },
             );
           },
+          child: BlocBuilder<UjianByKategoriBloc, UjianByKategoriState>(
+            builder: (context, state) {
+              return state.maybeMap(
+                orElse: () {
+                  return const SizedBox();
+                },
+                success: (e) {
+                  return CountdownTimer(
+                    duration: e.response.timer,
+                    onTimerCompletion: (timeRemaining) {
+                      context.pushReplacement(QuizFinishPage(
+                        data: widget.data,
+                        timeRemaining: timeRemaining,
+                      ));
+                    },
+                  );
+                },
+              );
+            },
+          ),
         ),
         IconButton(
             onPressed: () {
@@ -84,34 +118,47 @@ class _QuizStartPageState extends State<QuizStartPage> {
               fontSize: 18,
             ),
           ),
-          BlocBuilder<UjianByKategoriBloc, UjianByKategoriState>(
-            builder: (context, state) {
-              return state.maybeMap(
-                orElse: () {
-                  return const SizedBox();
-                },
+          BlocListener<HitungNilaiBloc, HitungNilaiState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                orElse: () {},
                 success: (e) {
-                  return Row(
-                    children: [
-                      Flexible(
-                        child: LinearProgressIndicator(
-                          value: 1 / e.response.data.length,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 16.0),
-                      Text(
-                        '$quizNumber/${e.response.data.length}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  );
+                  context.pushReplacement(QuizFinishPage(
+                    data: widget.data,
+                    timeRemaining: 0,
+                  ));
                 },
               );
             },
+            child: BlocBuilder<DaftarSoalBloc, DaftarSoalState>(
+              builder: (context, state) {
+                return state.maybeMap(
+                  orElse: () {
+                    return const SizedBox();
+                  },
+                  success: (e) {
+                    return Row(
+                      children: [
+                        Flexible(
+                          child: LinearProgressIndicator(
+                            value: (e.index + 1) / e.data.length,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 16.0),
+                        Text(
+                          '${e.index + 1}/${e.data.length}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
           ),
           const SizedBox(height: 16.0),
-          const QuizMultipleChoice(),
+          QuizMultipleChoice(kategori: widget.data.kategori),
         ],
       ),
     );
