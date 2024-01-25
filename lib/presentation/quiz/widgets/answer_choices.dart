@@ -56,7 +56,8 @@ class AnswerChoices extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
         decoration:  BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(20)),
-            color: isSelected ? AppColors.lightGreen : AppColors.white),
+            color: isSelected ? AppColors.lightGreen : AppColors.white,
+            ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -71,10 +72,16 @@ class AnswerChoices extends StatelessWidget {
               width: 24,
               height: 24,
               decoration: ShapeDecoration(
-                color: isSelected ? AppColors.lightRed : AppColors.white,
+                color: isSelected ? AppColors.black : AppColors.white,
+                
                 shape: OvalBorder(
+                  
                   side: BorderSide(
-                      width: isSelected ? 0 : 2, color: AppColors.primary),
+                      width: isSelected ? 3 : 2, 
+                      color: isSelected ? AppColors.black : AppColors.primary,
+                      
+                      
+                      ),
                 ),
               ),
             ),

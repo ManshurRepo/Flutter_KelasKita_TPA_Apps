@@ -80,6 +80,7 @@ class _QuizMultipleChoiceState extends State<QuizMultipleChoice> {
                         });
                       },
                     ),
+                    
                     const SizedBox(height: 16.0),
                     AnswerChoices(
                       label: data[index].jawabanB,
@@ -90,6 +91,7 @@ class _QuizMultipleChoiceState extends State<QuizMultipleChoice> {
                           jawaban = 'b';
                         });
                       },
+                      
                     ),
                     const SizedBox(height: 16.0),
                     AnswerChoices(
@@ -101,7 +103,8 @@ class _QuizMultipleChoiceState extends State<QuizMultipleChoice> {
                             jawaban = 'c';
                           });
                         }),
-                    const SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0,
+                  ),
                     AnswerChoices(
                         label: data[index].jawabanD,
                         isSelected: selectedAnswer == data[index].jawabanD,

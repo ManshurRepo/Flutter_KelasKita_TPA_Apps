@@ -69,6 +69,7 @@ flutter:
     - assets/images/menu/
     - assets/images/onboarding/
 
+
 flutter_gen:
   output: lib/core/assets/
   # An image asset can refer to one or more resolution-specific "variants", see

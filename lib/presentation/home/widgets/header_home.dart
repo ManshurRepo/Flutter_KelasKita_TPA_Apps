@@ -34,8 +34,8 @@ class _HeaderHomeState extends State<HeaderHome> {
             children: [
               ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                child: Image.network(
-                  'https://i.pravatar.cc/200',
+                child: Image.asset(
+                  Assets.images.profil.path,
                   width: 64.0,
                   height: 64.0,
                   fit: BoxFit.cover,

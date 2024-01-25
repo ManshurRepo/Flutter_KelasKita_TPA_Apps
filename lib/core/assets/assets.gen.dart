@@ -103,13 +103,16 @@ class $AssetsImagesGen {
   $AssetsImagesOnboardingGen get onboarding =>
       const $AssetsImagesOnboardingGen();
 
+  /// File path: assets/images/profil.png
+  AssetGenImage get profil => const AssetGenImage('assets/images/profil.png');
+
   /// File path: assets/images/quiz-category.png
   AssetGenImage get quizCategory =>
       const AssetGenImage('assets/images/quiz-category.png');
 
   /// List of all assets
   List<AssetGenImage> get values =>
-      [finish, imgSuccess, logicTest, materi1, materi2, quizCategory];
+      [finish, imgSuccess, logicTest, materi1, materi2, profil, quizCategory];
 }
 
 class $AssetsImagesMenuGen {
